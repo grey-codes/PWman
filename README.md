@@ -1,5 +1,6 @@
 # PWman
 Password manager, made as a term project for IS360 at SEMO
+
 A general project design:
 - Main screen, uses RecyclerView to display password list, with FAB to add a password.
 Use fragment here, thus satisfying that requirement. Fragment swapped out to view fragment after tapping pw.
