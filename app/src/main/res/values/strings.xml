@@ -1,3 +1,15 @@
 <resources>
-    <string name="app_name">TermProject</string>
+    <string name="app_name">TermProject</string><string name="confirm_title">Are You Sure?</string>
+    <string name="confirm_message">This will permanently delete the password</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="button_delete">Delete</string>
+    <string name="password_added">Password added successfully</string>
+    <string name="password_not_added">Password was not added due to an error</string>
+    <string name="password_updated">Password updated</string>
+    <string name="password_not_updated">Password was not updated due to an error</string>
+    <string name="invalid_query_uri">Invalid query Uri: </string>
+    <string name="invalid_insert_uri">Invalid insert Uri: </string>
+    <string name="invalid_update_uri">Invalid update Uri: </string>
+    <string name="invalid_delete_uri">Invalid delete Uri: </string>
+    <string name="insert_failed">Insert failed:</string>
 </resources>

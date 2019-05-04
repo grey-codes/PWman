@@ -3,7 +3,7 @@
 //might need to change package names
 //might need to change lines 16 and 17
 
-package com.grey.termporject;
+package com.grey.termproject.data;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -13,12 +13,11 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
-import com.grey.passwords.R;
-import com.grey.termproject.DatabaseDescription.Password;
+import com.grey.termproject.R;
+import com.grey.termproject.data.DatabaseDescription.Password;
 
 
-public class PasswordContentProvider extends ContentProvider
-{
+public class PasswordContentProvider extends ContentProvider {
     private PasswordDatabaseHelper dbHelper;
 
     private static final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
@@ -26,8 +25,7 @@ public class PasswordContentProvider extends ContentProvider
     private static final int ONE_PASSWORD = 1;
     private static final int PASSWORDS = 2;
 
-    static 
-	{
+    static {
         uriMatcher.addURI(DatabaseDescription.AUTHORITY,
                 Password.TABLE_NAME + "/#", ONE_PASSWORD);
 
@@ -36,28 +34,24 @@ public class PasswordContentProvider extends ContentProvider
     }
 
     @Override
-    public boolean onCreate()
-    {
+    public boolean onCreate() {
         dbHelper = new PasswordDatabaseHelper(getContext());
         return true;
     }
 
     @Override
-    public String getType(Uri uri)
-    {
+    public String getType(Uri uri) {
         return null;
     }
 
     @Override
     public Cursor query(Uri uri, String[] projection,
-                        String selection, String[] selectionArgs, String sortOrder)
-    {
+                        String selection, String[] selectionArgs, String sortOrder) {
 
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
         queryBuilder.setTables(Password.TABLE_NAME);
 
-        switch (uriMatcher.match(uri))
-        {
+        switch (uriMatcher.match(uri)) {
             case ONE_PASSWORD:
                 queryBuilder.appendWhere(
                         DatabaseDescription.Password._ID + "=" + uri.getLastPathSegment());
@@ -77,23 +71,19 @@ public class PasswordContentProvider extends ContentProvider
     }
 
     @Override
-    public Uri insert(Uri uri, ContentValues values)
-    {
+    public Uri insert(Uri uri, ContentValues values) {
         Uri newPasswordUri = null;
 
-        switch (uriMatcher.match(uri))
-        {
+        switch (uriMatcher.match(uri)) {
             case PASSWORDS:
                 long rowId = dbHelper.getWritableDatabase().insert(
                         Password.TABLE_NAME, null, values);
 
-                if (rowId > 0)
-                {
+                if (rowId > 0) {
                     newPasswordUri = DatabaseDescription.Password.buildPasswordUri(rowId);
 
                     getContext().getContentResolver().notifyChange(uri, null);
-                }
-                else
+                } else
                     throw new SQLException(
                             getContext().getString(R.string.insert_failed) + uri);
                 break;
@@ -102,16 +92,14 @@ public class PasswordContentProvider extends ContentProvider
                         getContext().getString(R.string.invalid_insert_uri) + uri);
         }
 
-        return newRecipeUri;
+        return newPasswordUri;
     }
 
     @Override
-    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs)
-    {
+    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         int numberOfRowsUpdated;
 
-        switch (uriMatcher.match(uri))
-        {
+        switch (uriMatcher.match(uri)) {
             case ONE_PASSWORD:
                 String id = uri.getLastPathSegment();
 
@@ -124,8 +112,7 @@ public class PasswordContentProvider extends ContentProvider
                         getContext().getString(R.string.invalid_update_uri) + uri);
         }
 
-        if (numberOfRowsUpdated != 0)
-        {
+        if (numberOfRowsUpdated != 0) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
 
@@ -133,28 +120,26 @@ public class PasswordContentProvider extends ContentProvider
     }
 
     @Override
-    public int delete(Uri uri, String selection, String[] selectionArgs)
-    {
+    public int delete(Uri uri, String selection, String[] selectionArgs) {
         int numberOfRowsDeleted;
 
-        switch (uriMatcher.match(uri))
-        {
+        switch (uriMatcher.match(uri)) {
             case ONE_PASSWORD:
                 String id = uri.getLastPathSegment();
 
                 numberOfRowsDeleted = dbHelper.getWritableDatabase().delete(
                         DatabaseDescription.Password.TABLE_NAME,
-                        Pasword._ID + "=" + id, selectionArgs);
+                        Password._ID + "=" + id, selectionArgs);
                 break;
             default:
                 throw new UnsupportedOperationException(
                         getContext().getString(R.string.invalid_delete_uri) + uri);
         }
 
-        if (numberOfRowsDeleted != 0)
-        {
+        if (numberOfRowsDeleted != 0) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
 
         return numberOfRowsDeleted;
     }
+}
