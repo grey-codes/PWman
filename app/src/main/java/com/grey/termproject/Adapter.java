@@ -1,4 +1,4 @@
-//contactsAdapter
+//passwordsAdapter
 package com.grey.termproject;
 
 import android.database.Cursor;
@@ -14,8 +14,8 @@ import com.grey.termproject.data.DatabaseDescription.Password;
 public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>{
 
 
-    public interface ContactClickListener {
-        void onClick(Uri contactUri);
+    public interface PasswordClickListener {
+        void onClick(Uri passwordUri);
     }
 
 
@@ -30,7 +30,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>{
             // attach listener to itemView
             itemView.setOnClickListener(
                     new View.OnClickListener() {
-                        // executes when the contact in this ViewHolder is clicked
+                        // executes when the password in this ViewHolder is clicked
                         @Override
                         public void onClick(View view) {
                             clickListener.onClick(Password.buildPasswordUri(rowID));
@@ -43,9 +43,9 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>{
         }
     }
     private Cursor cursor = null;
-    private final ContactClickListener clickListener;
+    private final PasswordClickListener clickListener;
 
-    public Adapter(ContactClickListener clickListener) {
+    public Adapter(PasswordClickListener clickListener) {
         this.clickListener = clickListener;
     }
 

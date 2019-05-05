@@ -26,12 +26,12 @@ import com.grey.termproject.data.DatabaseDescription;
 public class EditFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     //declare in main
     public interface EditFragmentListener {
-        void onEditCompleted(Uri contactUri);
+        void onEditCompleted(Uri passwordUri);
     }
 
-    private static final int CONTACT_LOADER = 0;
+    private static final int PASSWORD_LOADER = 0;
     private EditFragmentListener listener;
-    private Uri contactUri;
+    private Uri passwordUri;
     private boolean addPassword = true;
 
     private TextInputLayout siteText;
@@ -59,12 +59,12 @@ public class EditFragment extends Fragment implements LoaderManager.LoaderCallba
         setHasOptionsMenu(true); // fragment has menu items to display
 
         View view = inflater.inflate(R.layout.fragment_edit, container, false);
-        siteText = (TextInputLayout) view.findViewById(R.id.site);
-        usernameText = (TextInputLayout) view.findViewById(R.id.username);
-        passwordText = (TextInputLayout) view.findViewById(R.id.password);
+        siteText = (TextInputLayout) view.findViewById(R.id.siteText);
+        usernameText = (TextInputLayout) view.findViewById(R.id.usernameText);
+        passwordText = (TextInputLayout) view.findViewById(R.id.passwordText);
 
         savePasswordFAB = (FloatingActionButton) view.findViewById(R.id.saveFAB);
-        checkPasswordFAB = (FloatingActionButton) view.findViewById(R.id.checkFAB);
+        //checkPasswordFAB = (FloatingActionButton) view.findViewById(R.id.checkFAB);
 
         savePasswordFAB.setOnClickListener(saveFABclicked);
         //checkPasswordFAB.setOnClickListener(checkFABclicked);//this will be the JSON thing
@@ -74,11 +74,11 @@ public class EditFragment extends Fragment implements LoaderManager.LoaderCallba
 
         if (arguments != null) {
             addPassword = false;
-            contactUri = arguments.getParcelable(MainActivity.CONTACT_URI);
+            passwordUri = arguments.getParcelable(MainActivity.PASSWORD_URI);
         }
 
-        if (contactUri != null)
-            getLoaderManager().initLoader(CONTACT_LOADER, null, this);
+        if (passwordUri != null)
+            getLoaderManager().initLoader(PASSWORD_LOADER, null, this);
 
         return view;
     }
@@ -117,12 +117,12 @@ public class EditFragment extends Fragment implements LoaderManager.LoaderCallba
                     ((InputMethodManager) getActivity().getSystemService(
                             Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(
                             getView().getWindowToken(), 0);
-                    save(); // save contact to the database
+                    save(); // save password to the database
                 }
             };
 
     private void save() {
-        // create ContentValues object containing contact's key-value pairs
+        // create ContentValues object containing password's key-value pairs
         ContentValues contentValues = new ContentValues();
         contentValues.put(DatabaseDescription.Password.COLUMN_ACCOUNT,
                 siteText.getEditText().getText().toString());
@@ -136,22 +136,22 @@ public class EditFragment extends Fragment implements LoaderManager.LoaderCallba
         if (addPassword) {
             // use Activity's ContentResolver to invoke
             // insert on the AddressBookContentProvider
-            Uri newContactUri = getActivity().getContentResolver().insert(
+            Uri newPasswordUri = getActivity().getContentResolver().insert(
                     DatabaseDescription.Password.CONTENT_URI, contentValues);
 
-            if (newContactUri != null) {
+            if (newPasswordUri != null) {
                 //in main
-                listener.onEditCompleted(newContactUri);
+                listener.onEditCompleted(newPasswordUri);
             }
         }
         else {
             // use Activity's ContentResolver to invoke
             // insert on the AddressBookContentProvider
             int updatedRows = getActivity().getContentResolver().update(
-                    contactUri, contentValues, null, null);
+                    passwordUri, contentValues, null, null);
 
             if (updatedRows > 0) {
-                listener.onEditCompleted(contactUri);
+                listener.onEditCompleted(passwordUri);
             }
 
         }
@@ -162,9 +162,9 @@ public class EditFragment extends Fragment implements LoaderManager.LoaderCallba
         // create an appropriate CursorLoader based on the id argument;
         // only one Loader in this fragment, so the switch is unnecessary
         switch (id) {
-            case CONTACT_LOADER:
+            case PASSWORD_LOADER:
                 return new CursorLoader(getActivity(),
-                        contactUri, // Uri of contact to display
+                        passwordUri, // Uri of password to display
                         null, // null projection returns all columns
                         null, // null selection returns all rows
                         null, // no selection arguments
@@ -176,7 +176,7 @@ public class EditFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        // if the contact exists in the database, display its data
+        // if the password exists in the database, display its data
         if (data != null && data.moveToFirst()) {
             // get the column index for each data item
             int account = data.getColumnIndex(DatabaseDescription.Password.COLUMN_ACCOUNT);

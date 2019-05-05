@@ -14,15 +14,6 @@
         android:clickable="true"
         app:srcCompat="@drawable/ic_save_black_24dp" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/checkFAB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:layout_gravity="top|end"
-        android:layout_marginEnd="64dp"
-        app:srcCompat="@drawable/ic_check_black_24dp" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

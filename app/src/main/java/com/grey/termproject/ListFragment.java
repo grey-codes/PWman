@@ -1,4 +1,4 @@
-//ContactsFragment
+//PasswordsFragment
 
 package com.grey.termproject;
 
@@ -30,20 +30,20 @@ import com.grey.termproject.data.DatabaseDescription.Password;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link ListFragment.OnFragmentInteractionListener} interface
+ * {@link ListFragment.PasswordsFragmentListener} interface
  * to handle interaction events.
  * Use the {@link ListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class ListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
-    public interface ContactsFragmentListener {
-        void onContactSelected(Uri contactUri);
+    public interface PasswordsFragmentListener {
+        void onPasswordSelected(Uri passwordUri);
 
-        void onAddContact();
+        void onAddPassword();
     }
 
-    private static final int CONTACTS_LOADER = 0;
-    private ContactsFragmentListener listener;
+    private static final int PASSWORDS_LOADER = 0;
+    private PasswordsFragmentListener listener;
     private Adapter Adapter;
 
     @Override
@@ -62,10 +62,10 @@ public class ListFragment extends Fragment implements LoaderManager.LoaderCallba
                 new LinearLayoutManager(getActivity().getBaseContext()));
 
         Adapter = new Adapter(
-                new Adapter.ContactClickListener() {
+                new Adapter.PasswordClickListener() {
                     @Override
-                    public void onClick(Uri contactUri) {
-                        listener.onContactSelected(contactUri);
+                    public void onClick(Uri passwordUri) {
+                        listener.onPasswordSelected(passwordUri);
                     }
                 }
         );
@@ -84,7 +84,7 @@ public class ListFragment extends Fragment implements LoaderManager.LoaderCallba
                     // displays the AddEditFragment when FAB is touched
                     @Override
                     public void onClick(View view) {
-                        listener.onAddContact();
+                        listener.onAddPassword();
                     }
                 }
         );
@@ -95,7 +95,7 @@ public class ListFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        listener = (ContactsFragmentListener) context;
+        listener = (PasswordsFragmentListener) context;
     }
 
     @Override
@@ -107,10 +107,10 @@ public class ListFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getLoaderManager().initLoader(CONTACTS_LOADER, null, this);
+        getLoaderManager().initLoader(PASSWORDS_LOADER, null, this);
     }
 
-    public void updateContactList() {
+    public void updatePasswordList() {
         Adapter.notifyDataSetChanged();
     }
 
@@ -119,9 +119,9 @@ public class ListFragment extends Fragment implements LoaderManager.LoaderCallba
         // create an appropriate CursorLoader based on the id argument;
         // only one Loader in this fragment, so the switch is unnecessary
         switch (id) {
-            case CONTACTS_LOADER:
+            case PASSWORDS_LOADER:
                 return new CursorLoader(getActivity(),
-                        Password.CONTENT_URI, // Uri of contacts table
+                        Password.CONTENT_URI, // Uri of passwords table
                         null, // null projection returns all columns
                         null, // null selection returns all rows
                         null, // no selection arguments
