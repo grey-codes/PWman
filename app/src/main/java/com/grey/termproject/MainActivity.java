@@ -44,8 +44,8 @@ public class MainActivity extends AppCompatActivity
     // display DetailFragment for selected password
     @Override
     public void onPasswordSelected(Uri passwordUri) {
-        //if (findViewById(R.id.fragment_container) != null) // phone
-            //displayPassword(passwordUri, R.id.fragment_container);
+        if (findViewById(R.id.fragment_container) != null) // phone
+            displayPassword(passwordUri, R.id.fragment_container);
     }
 
     // display AddEditFragment to add a new password
@@ -96,14 +96,12 @@ public class MainActivity extends AppCompatActivity
 
 
     // return to password list when displayed password deleted
-    /*
     @Override
     public void onPasswordDeleted() {
         // removes top of back stack
         getSupportFragmentManager().popBackStack();
         passwordsFragment.updatePasswordList(); // refresh passwords
     }
-    */
 
     // update GUI after new password or updated password saved
     @Override
