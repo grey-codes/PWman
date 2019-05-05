@@ -72,7 +72,7 @@ public class ListFragment extends Fragment implements LoaderManager.LoaderCallba
         recyclerView.setAdapter(Adapter);
 
         //need to add the ItemDivider class to make this work
-        recyclerView.addItemDecoration(new ItemDivider(getContext()));
+        recyclerView.addItemDecoration(new Divider(getContext()));
 
         recyclerView.setHasFixedSize(true);
 
