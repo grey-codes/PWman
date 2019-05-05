@@ -15,4 +15,6 @@
     <string name="siteHint">Site Name</string>
     <string name="usernameHint">Username</string>
     <string name="passwordHint">Password</string>
+    <string name="menuitem_edit">Edit</string>
+    <string name="menuitem_delete">Delete</string>
 </resources>
