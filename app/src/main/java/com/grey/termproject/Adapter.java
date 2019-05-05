@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.grey.termproject.data.DatabaseDescription;
 import com.grey.termproject.data.DatabaseDescription.Password;
 
 public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>{

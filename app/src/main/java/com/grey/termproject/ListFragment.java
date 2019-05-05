@@ -1,3 +1,5 @@
+//ContactsFragment
+
 package com.grey.termproject;
 
 import android.content.Context;
@@ -7,6 +9,22 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.support.v4.app.Fragment;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+
+import com.grey.termproject.data.DatabaseDescription.Password;
 
 
 /**
@@ -17,8 +35,116 @@ import android.view.ViewGroup;
  * Use the {@link ListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ListFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
+public class ListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+    public interface ContactsFragmentListener {
+        void onContactSelected(Uri contactUri);
+
+        void onAddContact();
+    }
+
+    private static final int CONTACTS_LOADER = 0;
+    private ContactsFragmentListener listener;
+    private Adapter Adapter;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+        setHasOptionsMenu(true);
+
+        View view = inflater.inflate(
+                R.layout.fragment_list, container, false);
+
+        RecyclerView recyclerView =
+                (RecyclerView) view.findViewById(R.id.rvPasswordList);
+
+        recyclerView.setLayoutManager(
+                new LinearLayoutManager(getActivity().getBaseContext()));
+
+        Adapter = new Adapter(
+                new Adapter.ContactClickListener() {
+                    @Override
+                    public void onClick(Uri contactUri) {
+                        listener.onContactSelected(contactUri);
+                    }
+                }
+        );
+        recyclerView.setAdapter(Adapter);
+
+        //need to add the ItemDivider class to make this work
+        recyclerView.addItemDecoration(new ItemDivider(getContext()));
+
+        recyclerView.setHasFixedSize(true);
+
+        FloatingActionButton addButton =
+                (FloatingActionButton) view.findViewById(R.id.saveFloatingActionButton);
+
+        addButton.setOnClickListener(
+                new View.OnClickListener() {
+                    // displays the AddEditFragment when FAB is touched
+                    @Override
+                    public void onClick(View view) {
+                        listener.onAddContact();
+                    }
+                }
+        );
+
+        return view;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        listener = (ContactsFragmentListener) context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        listener = null;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getLoaderManager().initLoader(CONTACTS_LOADER, null, this);
+    }
+
+    public void updateContactList() {
+        Adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        // create an appropriate CursorLoader based on the id argument;
+        // only one Loader in this fragment, so the switch is unnecessary
+        switch (id) {
+            case CONTACTS_LOADER:
+                return new CursorLoader(getActivity(),
+                        Password.CONTENT_URI, // Uri of contacts table
+                        null, // null projection returns all columns
+                        null, // null selection returns all rows
+                        null, // no selection arguments
+                        Password.COLUMN_ACCOUNT + " COLLATE NOCASE ASC"); // sort order
+            default:
+                return null;
+        }
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        Adapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        Adapter.swapCursor(null);
+    }
+
+
+
+
+   /* // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -33,14 +159,14 @@ public class ListFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
+    *//**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
      * @return A new instance of fragment ListFragment.
-     */
+     *//*
     // TODO: Rename and change types and number of parameters
     public static ListFragment newInstance(String param1, String param2) {
         ListFragment fragment = new ListFragment();
@@ -91,7 +217,7 @@ public class ListFragment extends Fragment {
         mListener = null;
     }
 
-    /**
+    *//**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
@@ -100,9 +226,9 @@ public class ListFragment extends Fragment {
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
-     */
+     *//*
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-    }
+    }*/
 }
