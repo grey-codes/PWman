@@ -1,6 +1,5 @@
 <resources>
-    <string name="app_name">TermProject</string>
-    <string name="confirm_title">Are You Sure?</string>
+    <string name="app_name">TermProject</string><string name="confirm_title">Are You Sure?</string>
     <string name="confirm_message">This will permanently delete the password</string>
     <string name="button_cancel">Cancel</string>
     <string name="button_delete">Delete</string>

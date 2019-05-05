@@ -34,13 +34,13 @@ public class PassViewFragment extends Fragment
 {
     public interface PassViewFragmentListener
     {
-        void onContactDeleted();
-        void onEditContact(Uri contactUri);
+        void onPasswordDeleted();
+        void onEditCompleted(Uri passwordUri);
     }
 
-    private static final int CONTACT_LOADER = 0;
+    private static final int PASSWORD_LOADER = 0;
     private PassViewFragmentListener listener;
-    private Uri contactUri;
+    private Uri passwordUri;
     private TextView siteText;
     private TextView usernameText;
     private TextView passwordText;
@@ -65,11 +65,11 @@ public class PassViewFragment extends Fragment
         super.onCreateView(inflater, container, savedInstanceState);
         setHasOptionsMenu(true); // this fragment has menu items to display
 
-        // get Bundle of arguments then extract the contact's Uri
+        // get Bundle of arguments then extract the password's Uri
         Bundle arguments = getArguments();
 
         if (arguments != null)
-            contactUri = arguments.getParcelable(MainActivity.PASSWORD_URI);
+            passwordUri = arguments.getParcelable(MainActivity.PASSWORD_URI);
 
         // inflate DetailFragment's layout
         View view =
@@ -81,8 +81,8 @@ public class PassViewFragment extends Fragment
         passwordText = (TextView) view.findViewById(R.id.passwordText);
 
 
-        // load the contact
-        getLoaderManager().initLoader(CONTACT_LOADER, null, this);
+        // load the password
+        getLoaderManager().initLoader(PASSWORD_LOADER, null, this);
         return view;
     }
 
@@ -96,17 +96,17 @@ public class PassViewFragment extends Fragment
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_edit:
-                listener.onEditContact(contactUri); // pass Uri to listener
+                listener.onEditCompleted(passwordUri); // pass Uri to listener
                 return true;
             case R.id.action_delete:
-                deleteContact();
+                deletePassword();
                 return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    private void deleteContact() {
+    private void deletePassword() {
         // modified from textbook, now using AlertDialog to do the checking instead of dialog fragment
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
         alertDialogBuilder.setMessage("Are you sure you want to delete?");
@@ -116,7 +116,8 @@ public class PassViewFragment extends Fragment
                     public void onClick(DialogInterface arg0, int arg1) {
                         //Toast.makeText(getActivity(),"You clicked yes button",Toast.LENGTH_LONG).show();
                         getActivity().getContentResolver().delete(
-                                contactUri, null, null);
+                                passwordUri, null, null);
+                        listener.onPasswordDeleted();
                     }
                 });
 
@@ -138,9 +139,9 @@ public class PassViewFragment extends Fragment
         CursorLoader cursorLoader;
 
         switch (id) {
-            case CONTACT_LOADER:
+            case PASSWORD_LOADER:
                 cursorLoader = new CursorLoader(getActivity(),
-                        contactUri, // Uri of contact to display
+                        passwordUri, // Uri of password to display
                         null, // null projection returns all columns
                         null, // null selection returns all rows
                         null, // no selection arguments
@@ -156,7 +157,7 @@ public class PassViewFragment extends Fragment
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        // if the contact exists in the database, display its data
+        // if the password exists in the database, display its data
         if (data != null && data.moveToFirst()) {
             // get the column index for each data item
             int site = data.getColumnIndex(Password.COLUMN_ACCOUNT);
