@@ -9,7 +9,7 @@ import android.support.v4.app.FragmentTransaction;
 
 public class MainActivity extends AppCompatActivity
         implements ListFragment.PasswordsFragmentListener,
-        //DetailFragment.DetailFragmentListener,
+        PassViewFragment.PassViewFragmentListener,
         EditFragment.EditFragmentListener {
     // key for storing a password's Uri in a Bundle passed to a fragment
     public static final String PASSWORD_URI = "password_uri";
@@ -57,9 +57,9 @@ public class MainActivity extends AppCompatActivity
 
 
     // display a password
-    /*
+
     private void displayPassword(Uri passwordUri, int viewID) {
-        DetailFragment detailFragment = new DetailFragment();
+        PassViewFragment detailFragment = new PassViewFragment();
 
         // specify password's Uri as an argument to the DetailFragment
         Bundle arguments = new Bundle();
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity
         transaction.addToBackStack(null);
         transaction.commit(); // causes DetailFragment to display
     }
-    */
+
 
     // display fragment for adding a new or editing an existing password
     private void displayAddEditFragment(int viewID, Uri passwordUri) {
@@ -112,4 +112,5 @@ public class MainActivity extends AppCompatActivity
         getSupportFragmentManager().popBackStack();
         passwordsFragment.updatePasswordList(); // refresh passwords
     }
+
 }
