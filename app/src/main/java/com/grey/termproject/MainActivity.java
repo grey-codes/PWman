@@ -10,6 +10,8 @@ public class MainActivity extends AppCompatActivity
         implements ListFragment.OnFragmentInteractionListener,
         EditFragment.EditFragmentListener{
 
+    public static final String CONTACT_URI = "contact_uri";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
