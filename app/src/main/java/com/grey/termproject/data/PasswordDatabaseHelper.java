@@ -11,6 +11,8 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.grey.termproject.data.DatabaseDescription.Password;
 
+import static com.grey.termproject.data.DatabaseDescription.Password.*;
+
 public class PasswordDatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "Password.db";
     private static final int DATABASE_VERSION = 1;
@@ -22,11 +24,11 @@ public class PasswordDatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         final String CREATE_PASSWORD_TABLE =
-                "CREATE TABLE " + DatabaseDescription.Password.TABLE_NAME +
-                        "(" + Password._ID + " integer primary key, " +
-                        Password.COLUMN_USERNAME + " TEXT, " +
-                        DatabaseDescription.Password.COLUMN_PASSWORD + " TEXT, " +
-                        DatabaseDescription.Password.COLUMN_ACCOUNT + " TEXT ";
+                "CREATE TABLE " + TABLE_NAME +
+                        "(" + _ID + " integer primary key, " +
+                        COLUMN_USERNAME + " TEXT, " +
+                        COLUMN_PASSWORD + " TEXT, " +
+                        COLUMN_ACCOUNT + " TEXT);";
         db.execSQL(CREATE_PASSWORD_TABLE);
     }
 
