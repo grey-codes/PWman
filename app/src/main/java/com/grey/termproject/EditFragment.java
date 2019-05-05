@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 
 import com.grey.termproject.data.DatabaseDescription;
 
@@ -34,9 +35,9 @@ public class EditFragment extends Fragment implements LoaderManager.LoaderCallba
     private Uri passwordUri;
     private boolean addPassword = true;
 
-    private TextInputLayout siteText;
-    private TextInputLayout usernameText;
-    private TextInputLayout passwordText;
+    private EditText siteText;
+    private EditText usernameText;
+    private EditText passwordText;
     private FloatingActionButton savePasswordFAB;
     private FloatingActionButton checkPasswordFAB;
 
@@ -59,9 +60,9 @@ public class EditFragment extends Fragment implements LoaderManager.LoaderCallba
         setHasOptionsMenu(true); // fragment has menu items to display
 
         View view = inflater.inflate(R.layout.fragment_edit, container, false);
-        siteText = (TextInputLayout) view.findViewById(R.id.siteText);
-        usernameText = (TextInputLayout) view.findViewById(R.id.usernameText);
-        passwordText = (TextInputLayout) view.findViewById(R.id.passwordText);
+        siteText = (EditText) view.findViewById(R.id.site);
+        usernameText = (EditText) view.findViewById(R.id.username);
+        passwordText = (EditText) view.findViewById(R.id.password);
 
         savePasswordFAB = (FloatingActionButton) view.findViewById(R.id.saveFAB);
         //checkPasswordFAB = (FloatingActionButton) view.findViewById(R.id.checkFAB);
@@ -69,6 +70,8 @@ public class EditFragment extends Fragment implements LoaderManager.LoaderCallba
         savePasswordFAB.setOnClickListener(saveFABclicked);
         //checkPasswordFAB.setOnClickListener(checkFABclicked);//this will be the JSON thing
         updateSaveFAB();
+
+        siteText.addTextChangedListener(nameChangedListener);
 
         Bundle arguments = getArguments();
 
@@ -101,7 +104,7 @@ public class EditFragment extends Fragment implements LoaderManager.LoaderCallba
     };
 
     private void updateSaveFAB() {
-        String input = siteText.getEditText().getText().toString();
+        String input = siteText.getText().toString();
 
         if (input.trim().length() != 0)
             savePasswordFAB.show();
@@ -125,11 +128,11 @@ public class EditFragment extends Fragment implements LoaderManager.LoaderCallba
         // create ContentValues object containing password's key-value pairs
         ContentValues contentValues = new ContentValues();
         contentValues.put(DatabaseDescription.Password.COLUMN_ACCOUNT,
-                siteText.getEditText().getText().toString());
+                siteText.getText().toString());
         contentValues.put(DatabaseDescription.Password.COLUMN_USERNAME,
-                usernameText.getEditText().getText().toString());
+                usernameText.getText().toString());
         contentValues.put(DatabaseDescription.Password.COLUMN_PASSWORD,
-                passwordText.getEditText().getText().toString());
+                passwordText.getText().toString());
 
 
 
@@ -185,11 +188,11 @@ public class EditFragment extends Fragment implements LoaderManager.LoaderCallba
 
 
             // fill EditTexts with the retrieved data
-            siteText.getEditText().setText(
+            siteText.setText(
                     data.getString(account));
-            usernameText.getEditText().setText(
+            usernameText.setText(
                     data.getString(username));
-            passwordText.getEditText().setText(
+            passwordText.setText(
                     data.getString(password));
 
             updateSaveFAB();

@@ -10,8 +10,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top|end"
-        android:layout_weight="1"
         android:clickable="true"
+        android:focusable="true"
         app:srcCompat="@drawable/ic_save_black_24dp" />
 
     <LinearLayout
@@ -19,47 +19,28 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-
-        <android.support.design.widget.TextInputLayout
+        <EditText
+            android:id="@+id/site"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/siteText">
+            android:autoText="false"
+            android:hint="@string/siteHint"
+            android:inputType="text|textCapWords" />
 
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/site"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Site Name" />
-
-        </android.support.design.widget.TextInputLayout>
-
-
-        <android.support.design.widget.TextInputLayout
+        <EditText
+            android:id="@+id/username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/usernameText">
-
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/username"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Username" />
-        </android.support.design.widget.TextInputLayout>
+            android:hint="@string/usernameHint"
+            android:inputType="text" />
 
 
-
-        <android.support.design.widget.TextInputLayout
+        <EditText
+            android:id="@+id/password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/passwordText">
-
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Password" />
-        </android.support.design.widget.TextInputLayout>
-
+            android:hint="@string/passwordHint"
+            android:inputType="textPassword" />
 
     </LinearLayout>
 
