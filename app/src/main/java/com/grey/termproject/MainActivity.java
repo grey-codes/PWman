@@ -1,11 +1,16 @@
 package com.grey.termproject;
 
+import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.content.CursorLoader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import android.net.Uri;
 import android.support.v4.app.FragmentTransaction;
+
+import com.grey.termproject.data.DatabaseDescription;
 
 public class MainActivity extends AppCompatActivity
         implements ListFragment.PasswordsFragmentListener,
@@ -109,6 +114,33 @@ public class MainActivity extends AppCompatActivity
         // removes top of back stack
         getSupportFragmentManager().popBackStack();
         passwordsFragment.updatePasswordList(); // refresh passwords
+    }
+
+    @Override
+    public void onEditPassword(Uri passwordUri) {
+        if (findViewById(R.id.fragment_container) != null)
+            displayAddEditFragment(R.id.fragment_container, passwordUri);
+    }
+
+    @Override
+    public void onValidatePassword(Uri passwordUri) {
+        Intent i = new Intent(getBaseContext(),CheckCompromised.class);
+        CursorLoader cursorLoader = new CursorLoader(this,
+                passwordUri, // Uri of password to display
+                null, // null projection returns all columns
+                null, // null selection returns all rows
+                null, // no selection arguments
+                null); // sort order
+        Cursor cur = cursorLoader.loadInBackground();
+        // if the password exists in the database, display its data
+        if (cur != null && cur.moveToFirst()) {
+            // get the column index for each data item
+            int pass = cur.getColumnIndex(DatabaseDescription.Password.COLUMN_PASSWORD);
+
+            final String passwd=cur.getString(pass);
+            i.putExtra("password",passwd);
+            startActivity(i);
+        }
     }
 
 }

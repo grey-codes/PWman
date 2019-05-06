@@ -3,6 +3,9 @@
 
 package com.grey.termproject;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
@@ -23,11 +26,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.grey.termproject.data.DatabaseDescription.Password;
 
 import org.w3c.dom.Text;
+
+import static android.content.Context.CLIPBOARD_SERVICE;
 
 public class PassViewFragment extends Fragment
         implements LoaderManager.LoaderCallbacks<Cursor>
@@ -35,7 +41,8 @@ public class PassViewFragment extends Fragment
     public interface PassViewFragmentListener
     {
         void onPasswordDeleted();
-        void onEditCompleted(Uri passwordUri);
+        void onEditPassword(Uri passwordUri);
+        void onValidatePassword(Uri passwordUri);
     }
 
     private static final int PASSWORD_LOADER = 0;
@@ -43,7 +50,9 @@ public class PassViewFragment extends Fragment
     private Uri passwordUri;
     private TextView siteText;
     private TextView usernameText;
-    private TextView passwordText;
+    private Button copyButton;
+    private FloatingActionButton validateButton;
+    private FloatingActionButton editButton;
 
 
     @Override
@@ -76,9 +85,22 @@ public class PassViewFragment extends Fragment
                 inflater.inflate(R.layout.fragment_pass_view, container, false);
 
         // get the EditTexts
-        siteText = (TextView) view.findViewById(R.id.siteText);
-        usernameText = (TextView) view.findViewById(R.id.usernameText);
-        passwordText = (TextView) view.findViewById(R.id.passwordText);
+        siteText = (TextView) view.findViewById(R.id.siteName);
+        usernameText = (TextView) view.findViewById(R.id.usernameLabel);
+        copyButton = (Button) view.findViewById(R.id.buttonCpyPass);
+
+        validateButton = (FloatingActionButton) view.findViewById(R.id.checkFAB);
+        editButton = (FloatingActionButton) view.findViewById(R.id.editFAB);
+        editButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                listener.onEditPassword(passwordUri); // pass Uri to listener
+            }
+        });
+        validateButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                listener.onValidatePassword(passwordUri); // pass Uri to listener
+            }
+        });
 
 
         // load the password
@@ -96,7 +118,7 @@ public class PassViewFragment extends Fragment
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_edit:
-                listener.onEditCompleted(passwordUri); // pass Uri to listener
+                listener.onEditPassword(passwordUri); // pass Uri to listener
                 return true;
             case R.id.action_delete:
                 deletePassword();
@@ -164,11 +186,20 @@ public class PassViewFragment extends Fragment
             int user = data.getColumnIndex(Password.COLUMN_USERNAME);
             int pass = data.getColumnIndex(Password.COLUMN_PASSWORD);
 
+            Object clipboardService = getContext().getSystemService(CLIPBOARD_SERVICE);
+            final ClipboardManager clipboardManager = (ClipboardManager)clipboardService;
 
             siteText.setText(data.getString(site));
             usernameText.setText(data.getString(user));
-            passwordText.setText(data.getString(pass));
-
+            final String passwd=data.getString(pass);
+            copyButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    // Create a new ClipData.
+                    ClipData clipData = ClipData.newPlainText("Source Text", passwd);
+                    // Set it as primary clip data to copy text to system clipboard.
+                    clipboardManager.setPrimaryClip(clipData);
+                }
+            });
 
         }
     }

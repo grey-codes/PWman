@@ -18,4 +18,6 @@
     <string name="backBtn">Go Back</string>
     <string name="menuitem_edit">Edit</string>
     <string name="menuitem_delete">Delete</string>
+    <string name="site_name_label">Site:</string>
+    <string name="username_label">Username:</string>
 </resources>
